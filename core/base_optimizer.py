@@ -1,13 +1,33 @@
 import numpy as np
+from typing import List, Dict, Any, Union, Iterable
+from .parameter import Parameter
 
 class BaseOptimizer:
-    def __init__(self, params, lr = 0.01):
+    def __init__(self,
+                 params: Iterable[Union[np.ndarray, list, tuple, Parameter]],
+                 lr: float = 0.01):
 
         if params is None:
             raise ValueError("parameters cannot be None")
-        self._params = list(params)
-        if len(self._params) == 0:
+
+        temp_list = list(params)
+
+        if len(temp_list) == 0:
             raise ValueError("Empty parameters list")
+
+        self._params = []
+
+        for i, param in enumerate(temp_list):
+            if isinstance(param, Parameter):
+                self._params.append(param)
+            else:
+                try:
+                    self._params.append(Parameter(param))
+                except Exception as e:
+                    raise TypeError(
+                        f"Cannot convert parameter {i} to Parameter. "
+                        f"Type: {type(param).__name__}, Error: {e}"
+                    )
 
         if (lr <= 0.0):
             raise ValueError(f"Learning rate must be positive, got {lr}")
@@ -27,9 +47,6 @@ class BaseOptimizer:
 
     def step(self):
         for i, param in enumerate(self._params):
-            if not hasattr(param, "grad"):
-                raise AttributeError(f"Parameter {i} has no gradient attribute")
-
             if param.grad is None:
                 raise ValueError(f"Gradient for parameter {i} is None")
         self._step_count += 1
@@ -43,8 +60,7 @@ class BaseOptimizer:
 
     def zero_grad(self):
         for param in self._params:
-            if hasattr(param, "grad") and param.grad is not None:
-                param.grad.fill(0)
+            param.zero_grad()
 
     def __repr__(self):
         return (
