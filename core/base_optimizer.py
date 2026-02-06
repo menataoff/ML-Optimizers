@@ -1,6 +1,6 @@
 import numpy as np
 from typing import List, Dict, Any, Union, Iterable
-from core import Parameter
+from .parameter import Parameter
 
 class BaseOptimizer:
     def __init__(self,
