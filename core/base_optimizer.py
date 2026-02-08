@@ -4,36 +4,32 @@ from .parameter import Parameter
 
 class BaseOptimizer:
     def __init__(self,
-                 params: Iterable[Union[np.ndarray, list, tuple, Parameter]],
-                 lr: float = 0.01):
+                 params: Iterable[Union[np.ndarray, Parameter]],
+                 lr: float = 0.01,
+                 weight_decay: float = 0.0) -> None:
 
         if params is None:
             raise ValueError("parameters cannot be None")
+        if (weight_decay < 0):
+            raise ValueError(f"weight_decay cannot be negative, got {weight_decay}")
+        if (lr <= 0.0):
+            raise ValueError(f"Learning rate must be positive, got {lr}")
 
-        temp_list = list(params)
-
-        if len(temp_list) == 0:
-            raise ValueError("Empty parameters list")
+        self.lr = lr
+        self._step_count = 0
+        self.weight_decay = weight_decay
 
         self._params = []
 
-        for i, param in enumerate(temp_list):
+        for i, param in enumerate(params):
             if isinstance(param, Parameter):
                 self._params.append(param)
+            elif isinstance(param, np.ndarray):
+                self._params.append(Parameter(param))
             else:
-                try:
-                    self._params.append(Parameter(param))
-                except Exception as e:
-                    raise TypeError(
-                        f"Cannot convert parameter {i} to Parameter. "
-                        f"Type: {type(param).__name__}, Error: {e}"
-                    )
-
-        if (lr <= 0.0):
-            raise ValueError(f"Learning rate must be positive, got {lr}")
-        self.lr = lr
-
-        self._step_count = 0
+                raise TypeError(
+                    f"Data must be np.ndarray or Parameter, got {type(param)}"
+                )
 
     @property
     def params(self):
