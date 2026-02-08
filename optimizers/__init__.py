@@ -7,5 +7,6 @@ from .sgd import SGD
 from .momentum import Momentum
 from .nesterov_momentum import NAG
 from .adagrad import Adagrad
+from .rmsprop import RMSProp
 
-__all__ = ['GradientDescent', 'SGD', 'Momentum', 'NAG', 'Adagrad']
+__all__ = ['GradientDescent', 'SGD', 'Momentum', 'NAG', 'Adagrad', 'RMSProp']
