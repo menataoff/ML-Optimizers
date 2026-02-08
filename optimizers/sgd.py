@@ -1,13 +1,13 @@
 import numpy as np
 from core import BaseOptimizer, Parameter
 
-class GradientDescent(BaseOptimizer):
+class SGD(BaseOptimizer):
     """
-    Gradient descent algorithm.
+    Stochastic gradient descent algorithm.
     """
 
     def __repr__(self):
-        return f"GradientDescent(lr={self.lr}, params={len(self._params)})"
+        return f"StochasticGradientDescent(lr={self.lr}, params={len(self._params)})"
 
     def _update_parameters(self) -> None:
         for param in self._params:
