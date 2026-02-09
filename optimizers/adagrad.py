@@ -29,5 +29,5 @@ class Adagrad(BaseOptimizer):
             else:
                 grad_with_decay = param.grad
             G += grad_with_decay**2
-            adaptive_lr = self.lr / np.sqrt(G + self.eps)
+            adaptive_lr = self.lr / (np.sqrt(G) + self.eps)
             param.data -= adaptive_lr * grad_with_decay

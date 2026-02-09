@@ -51,5 +51,5 @@ class Adam(BaseOptimizer):
             G *= self.beta2
             G += (1-self.beta2)*grad_with_decay*grad_with_decay
 
-            adaptive_lr = self.lr / np.sqrt(G + self.eps)
+            adaptive_lr = self.lr / (np.sqrt(G) + self.eps)
             param.data -= adaptive_lr * velocity
