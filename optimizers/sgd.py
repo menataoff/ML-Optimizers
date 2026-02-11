@@ -1,5 +1,5 @@
 import numpy as np
-from core import BaseOptimizer, Parameter
+from ..core import BaseOptimizer, Parameter
 
 class SGD(BaseOptimizer):
     """

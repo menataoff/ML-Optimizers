@@ -1,4 +1,4 @@
-from core import BaseOptimizer, Parameter
+from ..core import BaseOptimizer, Parameter
 from typing import Union, Iterable
 import numpy as np
 
